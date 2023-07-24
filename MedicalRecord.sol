@@ -22,6 +22,7 @@ contract MedicalRecord {
         uint age;
         bytes disease;
         bool Registered;
+       // bytes medicin_ids;
        uint[] prescribed_medicine_ids;
      }
 
@@ -117,14 +118,14 @@ function viewDoctorById(uint _id) public view returns(uint id, string memory nam
 
     }
     
-    // view
+    // view patient all record
     function viewRecord() public view onlypatient returns(uint id,uint age,string memory name,string memory disease){
 
          id = patients[msg.sender].Id;
          age = patients[msg.sender].age;
          name = patients[msg.sender].name;
          disease = string(patients[msg.sender].disease);
-        //  medicin_ids = string(patients[msg.sender].medicin_ids);
+       
         // patient_address = msg.sender;
 
     }
@@ -159,6 +160,7 @@ function viewDoctorById(uint _id) public view returns(uint id, string memory nam
 
     
 
+
     function presribeMedicine(address patient_addr, uint _medicine_id) public onlyDoctor {
         patients[patient_addr].prescribed_medicine_ids.push(_medicine_id);
     }
@@ -167,6 +169,22 @@ function viewDoctorById(uint _id) public view returns(uint id, string memory nam
         return patients[patient_addr].prescribed_medicine_ids;
     }
 
-    
+
+     // view patient data by patient Id
+    function viewPatientRecordById(uint256 id) public view  returns(uint mid){
+
+
+         for (uint i =0; i < patient_record.length; i++) 
+        {
+            if(patient_record[i].Id == id) {
+                return (patient_record[i].Id);
+            }
+
+        }
+        
+       
+
+    }
+
 
 }
