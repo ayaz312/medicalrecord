@@ -22,7 +22,7 @@ contract MedicalRecord {
         uint age;
         bytes disease;
         bool Registered;
-       // bytes medicin_ids;
+       uint[] prescribed_medicine_ids;
      }
 
      // node for medicin record
@@ -55,7 +55,7 @@ contract MedicalRecord {
         _;
     }
 
-    modifier onlydoctor{
+    modifier onlyDoctor{
         require(doctors[msg.sender].Registered,"you are not registered");
         _;
     }
@@ -158,33 +158,15 @@ function viewDoctorById(uint _id) public view returns(uint id, string memory nam
     }
 
     
-   function addPrescribedMedicin(
-        uint256 _medicinid,
-        uint256 _patient_id
-        
-    ) public onlydoctor {
-        prescribedmedicins[_patient_id].medicin_id = _medicinid;
-        prescribedmedicins[_patient_id].patient_id = _patient_id;
 
-        prescribed_medicin_record.push(prescribedmedicins[_patient_id]);
-        
+    function presribeMedicine(address patient_addr, uint _medicine_id) public onlyDoctor {
+        patients[patient_addr].prescribed_medicine_ids.push(_medicine_id);
     }
-    
-    function queryPrescribedMedicinById(uint256 _patient_id) public view returns (uint id)
-    {
-       
-       for (uint i =0; i < prescribed_medicin_record.length; i++) 
-        {
-            
-            if(prescribed_medicin_record[i].patient_id == _patient_id) {
-                
-                     return prescribed_medicin_record[i].medicin_id;
-            }
-        }
-        
-    
+
+    function getPrescribedMedicine(address patient_addr) public view returns(uint[] memory med_ids) {
+        return patients[patient_addr].prescribed_medicine_ids;
     }
 
     
 
-    }
+}
